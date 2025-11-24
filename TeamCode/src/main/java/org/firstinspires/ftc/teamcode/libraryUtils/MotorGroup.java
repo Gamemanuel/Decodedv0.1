@@ -13,7 +13,7 @@ public class MotorGroup {
         Motor1.setPower(power);
         Motor2.setPower(power);
     }
-    public double[] getPower() {
-        return new double[]{Motor1.getPower(), Motor2.getPower()};
+    public double getPower() {
+        return Motor1.getPower();
     }
 }
