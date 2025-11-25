@@ -23,8 +23,9 @@ public abstract class TeleOp extends robotCommands {
     public void loop() {
         liftIsManual = new Toggle(liftManualCheck.wasJustPressed());
         drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
-        intake.front.setPower(-gamepad2.left_stick_y);
+        intake.front.setPower(-gamepad2.left_trigger + gamepad2.right_trigger);
 
         telemetry.addData("liftIsManual",liftIsManual);
+        telemetry.update();
     }
 }
