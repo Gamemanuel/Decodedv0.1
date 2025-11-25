@@ -29,7 +29,7 @@ public abstract class TeleOp extends robotCommands {
         intake.front.setPower(-gamepad2.left_trigger + gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
-//        telemetry.addData("liftIsManual",liftIsManual.get());
+        telemetry.addData("liftIsManual",liftIsManual);
         telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
         telemetry.update();
     }
