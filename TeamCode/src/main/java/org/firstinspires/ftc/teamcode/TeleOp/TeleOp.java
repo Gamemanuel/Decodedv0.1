@@ -11,10 +11,10 @@ public abstract class TeleOp extends robotCommands {
     }
 
     public void init() {
-        drivetrain = new Drivetrain(hardwareMap);
+
     }
 
     public void loop() {
-        drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
+
     }
 }
