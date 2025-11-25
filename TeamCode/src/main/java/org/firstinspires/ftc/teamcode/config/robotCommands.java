@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.config;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
 import org.firstinspires.ftc.teamcode.Alliance;
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
@@ -18,11 +15,13 @@ public abstract class robotCommands extends OpMode {
         this.alliance = alliance;
     }
 
+    @Override
     public void init() {
         turretSubsystem = new TurretSubsystem(hardwareMap);
         llSubsystem = new LLSubsystem(hardwareMap, alliance);
     }
 
+    @Override
     public void loop() {
        turretSubsystem.periodic();
        llSubsystem.periodic();

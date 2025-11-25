@@ -21,14 +21,21 @@ public abstract class TeleOp extends robotCommands {
     }
 
     public void loop() {
+        // Manual lift functions
         liftManualCheck = new ButtonEx(gamepad2.left_bumper && gamepad2.right_bumper);
         if (liftManualCheck.wasJustPressed()) {
             liftIsManual = !liftIsManual;
         }
+
+        // Drivetrain functions
         drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
-        intake.front.setPower(-gamepad2.left_trigger + gamepad2.right_trigger);
+
+        // Intake subsystem
+        intake.front.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
+
+        // telemetry data for the robot
         telemetry.addData("liftIsManual",liftIsManual);
         telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
         telemetry.update();
