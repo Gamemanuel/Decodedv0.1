@@ -10,10 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 public abstract class robotCommands extends OpMode {
 
-    Drivetrain drivetrain;
-    Intake intake;
     private final Alliance alliance;
-
     public TurretSubsystem turretSubsystem;
     public LLSubsystem llSubsystem;
 
@@ -22,7 +19,6 @@ public abstract class robotCommands extends OpMode {
     }
 
     public void init() {
-        drivetrain = new Drivetrain(hardwareMap);
         turretSubsystem = new TurretSubsystem(hardwareMap);
         llSubsystem = new LLSubsystem(hardwareMap, alliance);
     }
@@ -31,7 +27,5 @@ public abstract class robotCommands extends OpMode {
        turretSubsystem.periodic();
        llSubsystem.periodic();
        turretSubsystem.periodic();
-       drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
-       intake.front.setPower(-gamepad2.left_stick_y);
     }
 }
