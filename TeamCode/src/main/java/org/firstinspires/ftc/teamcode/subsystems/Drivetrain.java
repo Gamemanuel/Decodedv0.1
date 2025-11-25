@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.libraryUtils.MotorGroup;
+import org.firstinspires.ftc.teamcode.libraryUtils.MotorGroup.MotorGroup;
 
 public class Drivetrain {
     public MotorGroup LeftSide;
