@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import org.firstinspires.ftc.teamcode.Alliance;
 import org.firstinspires.ftc.teamcode.config.robotCommands;
 import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
-import org.firstinspires.ftc.teamcode.libraryUtils.Toggle;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
 public abstract class TeleOp extends robotCommands {
     ButtonEx liftManualCheck;
-    Toggle liftIsManual;
+    boolean liftIsManual = false;
     Drivetrain drivetrain;
     Intake intake;
 
@@ -17,16 +16,21 @@ public abstract class TeleOp extends robotCommands {
 
     public void init() {
         drivetrain = new Drivetrain(hardwareMap);
-        liftManualCheck = new ButtonEx(gamepad2.back && gamepad2.dpad_left);
+
         intake = new Intake(hardwareMap);
     }
 
     public void loop() {
-        liftIsManual = new Toggle(liftManualCheck.wasJustPressed());
+        liftManualCheck = new ButtonEx(gamepad2.left_bumper && gamepad2.right_bumper);
+        if (liftManualCheck.wasJustPressed()) {
+            liftIsManual = !liftIsManual;
+        }
         drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
         intake.front.setPower(-gamepad2.left_trigger + gamepad2.right_trigger);
+        intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
-        telemetry.addData("liftIsManual",liftIsManual);
+//        telemetry.addData("liftIsManual",liftIsManual.get());
+        telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
         telemetry.update();
     }
 }
