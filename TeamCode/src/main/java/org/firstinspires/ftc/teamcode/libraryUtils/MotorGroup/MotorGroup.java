@@ -15,7 +15,7 @@ public class MotorGroup {
      * Creates a motor group with the leader and follower motors that preform the same action as the leader
      *
      * @author Will (v1) with edits by Gavin (v2)
-     * @verson 1
+     * @version 1
      * @param leader The 1st motor in the motor group we set this one
      * @param follower This is the 2nd motor in the group and it follows the actions of the leader
      *
@@ -31,7 +31,7 @@ public class MotorGroup {
      * Sets the power of the MotorGroup.
      *
      * @author Will (v1) with edits by Gavin (v2)
-     * @verson 1
+     * @version 1
      * @param power This is the power that you want the motor to go. can be -1 to 1 and this will set the power of both motors
      *
      */
@@ -44,7 +44,7 @@ public class MotorGroup {
      * gets the power of the MotorGroup through the Leader power.
      *
      * @author Will (v1) with edits by Gavin (v2)
-     * @verson 1
+     * @version 1
      *
      */
     public double getPower() {
