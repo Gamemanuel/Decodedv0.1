@@ -5,7 +5,7 @@ public class ButtonEx {
     /**
      * Creates a button that has extra functionality.
      * @author Will
-     * @version 0
+     * @version 0.1
      */
     public ButtonEx(boolean input) {
         this.currentInput = input;
