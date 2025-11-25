@@ -31,8 +31,8 @@ public class Drivetrain {
         // Right side of the robot
         DcMotorEx frontRight = hMap.get(DcMotorEx.class, "frontRight");
         DcMotorEx backRight = hMap.get(DcMotorEx.class, "backRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         RightSide = new MotorGroup(frontRight,backRight);
     }
 
