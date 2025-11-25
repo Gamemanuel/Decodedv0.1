@@ -18,6 +18,7 @@ public abstract class TeleOp extends robotCommands {
     public void init() {
         drivetrain = new Drivetrain(hardwareMap);
         liftManualCheck = new ButtonEx(gamepad2.back && gamepad2.dpad_left);
+        intake = new Intake(hardwareMap);
     }
 
     public void loop() {

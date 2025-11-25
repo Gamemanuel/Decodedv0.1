@@ -11,4 +11,5 @@ public class Intake {
         front = hMap.get(DcMotorEx.class, "intake1");
         floop = hMap.get(Servo.class, "intake2");
     }
+
 }
