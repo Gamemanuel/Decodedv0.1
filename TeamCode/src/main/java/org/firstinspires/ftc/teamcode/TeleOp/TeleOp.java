@@ -11,14 +11,12 @@ public abstract class TeleOp extends robotCommands {
     public TeleOp(Alliance alliance) {
         super(alliance);
     }
-    Gamepad hunter = gamepad1;
-    Gamepad madelyn = gamepad2;
 
     public void init() {
         drivetrain = new Drivetrain(hardwareMap);
     }
 
     public void loop() {
-        drivetrain.Drive(hunter.left_stick_y,hunter.right_stick_x);
+        drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
     }
 }
