@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 public abstract class robotCommands extends OpMode {
 
     private final Alliance alliance;
-    public TurretSubsystem turretSubsystem;
     public LLSubsystem llSubsystem;
 
     public robotCommands(Alliance alliance) {
@@ -17,14 +16,12 @@ public abstract class robotCommands extends OpMode {
 
     @Override
     public void init() {
-        turretSubsystem = new TurretSubsystem(hardwareMap);
+
         llSubsystem = new LLSubsystem(hardwareMap, alliance);
     }
 
     @Override
     public void loop() {
-       turretSubsystem.periodic();
        llSubsystem.periodic();
-       turretSubsystem.periodic();
     }
 }
