@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.libraryUtils.MotorGroup;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+/**
+ * Groups 2 motors together to act as one.
+ */
 public class MotorGroup {
 
     // defines the motors that we use locally and are instated when we call the class.

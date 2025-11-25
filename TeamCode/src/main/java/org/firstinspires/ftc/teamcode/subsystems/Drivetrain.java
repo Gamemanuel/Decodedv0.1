@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.libraryUtils.MotorGroup.MotorGroup;
 public class Drivetrain {
     public MotorGroup LeftSide;
     public MotorGroup RightSide;
-    MotorGroup motorGroup;
 
     // CPR (counts per motor revolution) calculations
     static final double     COUNTS_PER_MOTOR_REV    = 28.0;
