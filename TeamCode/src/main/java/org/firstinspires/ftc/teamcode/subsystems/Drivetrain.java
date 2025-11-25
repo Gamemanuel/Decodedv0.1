@@ -37,8 +37,8 @@ public class Drivetrain {
     }
 
     public void Drive(double forward, double turn) {
-        LeftSide.setPower(forward + turn);
-        RightSide.setPower(forward - turn);
+        LeftSide.setPower(forward - turn);
+        RightSide.setPower(forward + turn);
     }
 
 }
