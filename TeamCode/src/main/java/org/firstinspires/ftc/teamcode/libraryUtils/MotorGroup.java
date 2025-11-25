@@ -1,23 +1,51 @@
 package org.firstinspires.ftc.teamcode.libraryUtils;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class MotorGroup {
-    private final DcMotorEx Motor1;
-    private final DcMotorEx Motor2;
-    public MotorGroup(DcMotorEx motor1, DcMotorEx motor2, DcMotorEx.Direction direction) {
-        this.Motor1 = motor1;
-        this.Motor2 = motor2;
-        motor1.setDirection(direction);
-        motor2.setDirection(direction);
+
+    // defines the motors that we use locally and are instated when we call the class.
+    private final DcMotorEx Leader;
+    private final DcMotorEx Follower;
+
+    /**
+     * Creates a motor group with the leader and follower motors that preform the same action as the leader
+     *
+     * @author Will (v1) with edits by Gavin (v2)
+     * @verson 1
+     * @param leader The 1st motor in the motor group we set this one
+     * @param follower This is the 2nd motor in the group and it follows the actions of the leader
+     *
+     */
+    public MotorGroup(DcMotorEx leader, DcMotorEx follower, DcMotorEx.Direction direction) {
+        this.Leader = leader;
+        this.Follower = follower;
+        leader.setDirection(direction);
+        follower.setDirection(direction);
     }
+
+    /**
+     * Sets the power of the MotorGroup.
+     *
+     * @author Will (v1) with edits by Gavin (v2)
+     * @verson 1
+     * @param power This is the power that you want the motor to go. can be -1 to 1 and this will set the power of both motors
+     *
+     */
     public void setPower(double power) {
-        Motor1.setPower(power);
-        Motor2.setPower(power);
+        Leader.setPower(power);
+        Follower.setPower(power);
     }
+
+    /**
+     * gets the power of the MotorGroup through the Leader power.
+     *
+     * @author Will (v1) with edits by Gavin (v2)
+     * @verson 1
+     *
+     */
     public double getPower() {
-        return Motor1.getPower();
+        return Leader.getPower();
     }
 
 }
