@@ -11,7 +11,7 @@ public class MotorGroup {
      * Creates a motor group with the leader and follower motors that preform the same action as the leader
      *
      * @author Will (v1) with edits by Gavin (v2)
-     * @version 1
+     * @version 2
      * @param leader The 1st motor in the motor group we set this one
      * @param follower This is the 2nd motor in the group and it follows the actions of the leader
      *

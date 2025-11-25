@@ -2,18 +2,21 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Alliance;
 import org.firstinspires.ftc.teamcode.config.robotCommands;
-import org.firstinspires.ftc.teamcode.libraryUtils.ButtonCombo;
+import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
+import org.firstinspires.ftc.teamcode.libraryUtils.Toggle;
 
 public abstract class TeleOp extends robotCommands {
-    ButtonCombo LiftIsManual;
+    ButtonEx liftManualCheck;
+    Toggle liftIsManual;
     public TeleOp(Alliance alliance) {super(alliance);}
 
     public void init() {
-        LiftIsManual = new ButtonCombo(gamepad2.back, gamepad2.dpad_left);
+        liftManualCheck = new ButtonEx(gamepad2.back && gamepad2.dpad_left);
     }
 
     public void loop() {
-        LiftIsManual.check();
-        telemetry.addData("Manual?", LiftIsManual.get());
+        liftIsManual = new Toggle(liftManualCheck.wasJustPressed());
+
+        telemetry.addData("liftIsManual",liftIsManual);
     }
 }

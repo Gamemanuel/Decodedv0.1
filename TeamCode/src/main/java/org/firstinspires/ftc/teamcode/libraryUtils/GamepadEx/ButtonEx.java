@@ -3,7 +3,7 @@ public class ButtonEx {
     private final boolean currentInput;
     private boolean lastInput;
     /**
-     * Creates a button that has built in checks. For example: wasJustPressed.
+     * Creates a button that has extra functionality.
      * @author Will
      * @version 0
      */
