@@ -11,14 +11,14 @@ public class TurretAutoLLCMD {
 
     PIDFController llPidf;
 
-    TurretSubsystem subsystem;
+    TurretSubsystem turret;
     LLSubsystem ll;
 
     double offset = 0;
 
 
-    public TurretAutoLLCMD(TurretSubsystem subsystem, LLSubsystem ll) {
-        this.subsystem = subsystem;
+    public TurretAutoLLCMD(TurretSubsystem turret, LLSubsystem ll) {
+        this.turret = turret;
         this.ll = ll;
 
         llPidf = new PIDFController(TurretSubsystem.llPidfCoeffs);
@@ -51,20 +51,34 @@ public class TurretAutoLLCMD {
             if (ll.alliance == Alliance.BLUE ){
                 if (tx != null) {
                     double turretPower = llPidf.calculate(tx-offset);
-                    subsystem.setTurretPower(turretPower);
+                    turret.setPower(turretPower);
                 } else {
-                    subsystem.setTurretPower(0);
+                    turret.setPower(0);
                 }
             } else if (ll.alliance == Alliance.RED) {
 
                 if (tx != null) {
                     double turretPower = llPidf.calculate(tx+offset);
-                    subsystem.setTurretPower(turretPower);
+                    turret.setPower(turretPower);
                 } else {
-                    subsystem.setTurretPower(0);
+                    turret.setPower(0);
                 }
             }
         }
 
+    }
+    public void faceGoal(double tolerance) {
+        Double tx = ll.getAllianceTX();
+        double speed = Math.min(1,Math.max(tx/10, 0.25));
+        if (Math.abs(tx) > tolerance) {
+            if (tx > 0) {
+                // negative is right
+                turret.setPower(speed);
+            } else {
+                turret.setPower(speed);
+            }
+        } else {
+            turret.setPower(0);
+        }
     }
 }

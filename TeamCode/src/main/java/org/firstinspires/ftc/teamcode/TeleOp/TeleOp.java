@@ -48,13 +48,13 @@ public abstract class TeleOp extends robotCommands {
         turretSubsystem.periodic();
 
         if (gamepad2.right_bumper) {
-            turretSubsystem.setTurretPower(-1);
+            turretSubsystem.setPower(-1);
         }
         if (gamepad2.left_bumper) {
-            turretSubsystem.setTurretPower(1);
+            turretSubsystem.setPower(1);
         }
         if (!gamepad2.left_bumper && !gamepad2.right_bumper) {
-            turretSubsystem.setTurretPower(0);
+            turretSubsystem.setPower(0);
         }
 
 
