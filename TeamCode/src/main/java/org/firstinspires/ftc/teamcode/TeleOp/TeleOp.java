@@ -13,13 +13,17 @@ public abstract class TeleOp extends robotCommands {
     Drivetrain drivetrain;
     Intake intake;
     TurretSubsystem turretSubsystem;
+    private final Alliance alliance;
 
-    public TeleOp(Alliance alliance) {super(alliance);}
+    public TeleOp(Alliance alliance) {
+        super(alliance);
+        this.alliance = alliance;
+    }
 
     public void init() {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
-        turretSubsystem = new TurretSubsystem(hardwareMap);
+        turretSubsystem = new TurretSubsystem(hardwareMap, alliance);
     }
 
     public void loop() {
@@ -35,7 +39,6 @@ public abstract class TeleOp extends robotCommands {
         // Intake subsystem
         intake.front.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
-
 
         // telemetry data for the robot
         telemetry.addData("liftIsManual",liftIsManual);
