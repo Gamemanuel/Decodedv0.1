@@ -34,29 +34,34 @@ public abstract class TeleOp extends robotCommands {
         }
 
         // Drivetrain functions
-        drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
+        drivetrain.Drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         // Intake subsystem
         intake.front.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
         // telemetry data for the robot
-        telemetry.addData("liftIsManual",liftIsManual);
+        telemetry.addData("liftIsManual", liftIsManual);
         telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
         telemetry.update();
 
         turretSubsystem.periodic();
 
-        if (gamepad2.right_bumper) {
-            turretSubsystem.setTurretPower(-1);
-        }
-        if (gamepad2.left_bumper) {
-            turretSubsystem.setTurretPower(1);
-        }
-        if (!gamepad2.left_bumper && !gamepad2.right_bumper) {
-            turretSubsystem.setTurretPower(0);
-        }
 
+        // If the bumpers on Madelyn's controller are pressed we override the regular
+        if (gamepad2.left_bumper || gamepad2.right_bumper) {
+            double turntablePower = 0;
+            if (gamepad2.left_bumper) {
+                turntablePower = turntablePower;
+            } else if (gamepad2.right_bumper) {
+                turntablePower = -turntablePower;
+            }
+            turretSubsystem.setTurretPower(turntablePower);
+            // If the bumpers on Madelyn's controller are not pressed then let the limelight
+            // handel the auto targeting code based on the utils function
+        } else {
+            // run the auto tracking code here.
+        }
 
     }
 }
