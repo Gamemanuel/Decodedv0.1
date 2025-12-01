@@ -42,23 +42,6 @@ public abstract class TeleOp extends robotCommands {
         telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
         telemetry.update();
 
-//        turretSubsystem.setDefaultCommand(
-//                new TurretAutoLLCMD(turretSubsystem, llSubsystem)
-//        );
-//
-//        // this creates and binds the manual override.
-//        Command manualOverrideCMD = new TurretManualCMD(turretSubsystem, gamepad2);
-//
-//        // Get the bumper buttons from gamepad2
-//        GamepadButton leftBumper = Madelyn.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
-//        GamepadButton rightBumper = Madelyn.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
-//
-//        // When EITHER bumper is held, run the manual command. When released,
-//        // the manual command will stop and the auto-aim command will take over.
-//        (leftBumper.or(rightBumper)).whileActiveOnce(manualOverrideCMD);
-
-//        new TurretAutoLLCMD(turretSubsystem, llSubsystem);
-
         turretSubsystem.periodic();
 
         if (gamepad2.right_bumper) {
