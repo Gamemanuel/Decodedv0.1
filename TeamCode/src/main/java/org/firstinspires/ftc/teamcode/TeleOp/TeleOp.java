@@ -13,13 +13,17 @@ public abstract class TeleOp extends robotCommands {
     Drivetrain drivetrain;
     Intake intake;
     TurretSubsystem turretSubsystem;
+    private final Alliance alliance;
 
-    public TeleOp(Alliance alliance) {super(alliance);}
+    public TeleOp(Alliance alliance) {
+        super(alliance);
+        this.alliance = alliance;
+    }
 
     public void init() {
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
-        turretSubsystem = new TurretSubsystem(hardwareMap);
+        turretSubsystem = new TurretSubsystem(hardwareMap, alliance);
     }
 
     public void loop() {
@@ -36,28 +40,10 @@ public abstract class TeleOp extends robotCommands {
         intake.front.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
-
         // telemetry data for the robot
         telemetry.addData("liftIsManual",liftIsManual);
         telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
         telemetry.update();
-
-//        turretSubsystem.setDefaultCommand(
-//                new TurretAutoLLCMD(turretSubsystem, llSubsystem)
-//        );
-//
-//        // this creates and binds the manual override.
-//        Command manualOverrideCMD = new TurretManualCMD(turretSubsystem, gamepad2);
-//
-//        // Get the bumper buttons from gamepad2
-//        GamepadButton leftBumper = Madelyn.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
-//        GamepadButton rightBumper = Madelyn.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
-//
-//        // When EITHER bumper is held, run the manual command. When released,
-//        // the manual command will stop and the auto-aim command will take over.
-//        (leftBumper.or(rightBumper)).whileActiveOnce(manualOverrideCMD);
-
-//        new TurretAutoLLCMD(turretSubsystem, llSubsystem);
 
         turretSubsystem.periodic();
 
