@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Alliance;
+import org.firstinspires.ftc.teamcode.commands.turret.TurretAutoLLCMD;
 import org.firstinspires.ftc.teamcode.config.robotCommands;
 import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -13,6 +14,7 @@ public abstract class TeleOp extends robotCommands {
     Drivetrain drivetrain;
     Intake intake;
     TurretSubsystem turretSubsystem;
+    TurretAutoLLCMD turretAuto;
     private final Alliance alliance;
 
     public TeleOp(Alliance alliance) {
@@ -54,7 +56,7 @@ public abstract class TeleOp extends robotCommands {
             turretSubsystem.setPower(1);
         }
         if (!gamepad2.left_bumper && !gamepad2.right_bumper) {
-            turretSubsystem.setPower(0);
+            turretAuto.faceGoal(5);
         }
 
 
