@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Alliance;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.config.robotCommands;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
 import org.firstinspires.ftc.teamcode.commands.turret.TurretAutoLLCMD;
 
-public abstract class TeleOp extends robotCommands {
+public abstract class TeleOp extends OpMode {
     ButtonEx liftManualCheck;
     boolean liftIsManual = false;
     Drivetrain drivetrain;
@@ -21,7 +21,6 @@ public abstract class TeleOp extends robotCommands {
     double[] turretTel;
 
     public TeleOp(Alliance alliance) {
-        super(alliance);
         this.alliance = alliance;
     }
 
