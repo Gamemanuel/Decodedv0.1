@@ -22,9 +22,6 @@ public class TurretAutoLLCMD {
         this.ll = ll;
 
         llPidf = new PIDFController(TurretSubsystem.llPidfCoeffs);
-
-//        addRequirements(subsystem);
-
     }
 
     public void execute() {

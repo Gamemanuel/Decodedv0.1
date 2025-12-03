@@ -28,33 +28,30 @@ public class TurretSubsystem {
         Turret.setPower(power);
     }
 
-    public void periodic() {
-        FtcDashboard.getInstance().getTelemetry().addData("turret power", Turret.getPower());
-    }
-    public void lookAtGoal(double tolerance) {
-        ll.limelight.pipelineSwitch(index);
-        LLResult llResult = robot.limelight.getLatestResult();
-        if (llResult != null && llResult.isValid()) {
-            double tx = llResult.getTx() + 5; // offset correction
-            telemetry.addData("Tx", llResult.getTx());
-            telemetry.addData("Tx with offset", tx);
-            telemetry.addData("Ty", llResult.getTy());
-            telemetry.addData("Ta", llResult.getTa());
-            telemetry.addData("wants to stop", Math.abs(tx) < tolerance);
-            if (Math.abs(tx) > tolerance) {
-                if (tx > 0) {
-                    // negative is right
-                    robot.turntable.setPower(-speed);
-                } else {
-                    robot.turntable.setPower(speed);
-                }
-            } else {
-                robot.turntable.setPower(0);
-            }
-        } else {
-            telemetry.addData("", "Nothing is being detected");
-            robot.turntable.setPower(0);
-        }
-        telemetry.update();
-    }
+//    public void lookAtGoal(double tolerance) {
+//        ll.limelight.pipelineSwitch(index);
+//        LLResult llResult = robot.limelight.getLatestResult();
+//        if (llResult != null && llResult.isValid()) {
+//            double tx = llResult.getTx() + 5; // offset correction
+//            telemetry.addData("Tx", llResult.getTx());
+//            telemetry.addData("Tx with offset", tx);
+//            telemetry.addData("Ty", llResult.getTy());
+//            telemetry.addData("Ta", llResult.getTa());
+//            telemetry.addData("wants to stop", Math.abs(tx) < tolerance);
+//            if (Math.abs(tx) > tolerance) {
+//                if (tx > 0) {
+//                    // negative is right
+//                    robot.turntable.setPower(-speed);
+//                } else {
+//                    robot.turntable.setPower(speed);
+//                }
+//            } else {
+//                robot.turntable.setPower(0);
+//            }
+//        } else {
+//            telemetry.addData("", "Nothing is being detected");
+//            robot.turntable.setPower(0);
+//        }
+//        telemetry.update();
+//    }
 }
