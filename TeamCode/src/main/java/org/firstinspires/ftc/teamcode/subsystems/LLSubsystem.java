@@ -9,13 +9,11 @@ import org.firstinspires.ftc.teamcode.Alliance;
 
 public class LLSubsystem {
 
+    public final Alliance alliance;
     public Limelight3A limelight;
-
     public LLResult result;
 
-    public final Alliance alliance;
-
-    public LLSubsystem(HardwareMap hMap, Alliance alliance){
+    public LLSubsystem(HardwareMap hMap, Alliance alliance) {
         limelight = hMap.get(Limelight3A.class, "limelight");
         this.alliance = alliance;
 
@@ -24,7 +22,7 @@ public class LLSubsystem {
         limelight.pipelineSwitch(0); // apriltags
     }
 
-    public void periodic(){
+    public void periodic() {
         result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
@@ -39,9 +37,7 @@ public class LLSubsystem {
         if (result != null && result.isValid() && !result.getFiducialResults().isEmpty()) {
             int id = result.getFiducialResults().get(0).getFiducialId();
 
-            if (alliance == Alliance.ANY ||
-                    (alliance == Alliance.RED && id == 24) ||
-                    (alliance == Alliance.BLUE && id == 20)) {
+            if (alliance == Alliance.ANY || (alliance == Alliance.RED && id == 24) || (alliance == Alliance.BLUE && id == 20)) {
                 return result.getTa();
             }
         }
@@ -55,9 +51,7 @@ public class LLSubsystem {
         if (result != null && result.isValid() && !result.getFiducialResults().isEmpty()) {
             int id = result.getFiducialResults().get(0).getFiducialId();
 
-            if (alliance == Alliance.ANY ||
-                    (alliance == Alliance.RED && id == 24) ||
-                    (alliance == Alliance.BLUE && id == 20)) {
+            if (alliance == Alliance.ANY || (alliance == Alliance.RED && id == 24) || (alliance == Alliance.BLUE && id == 20)) {
                 return result.getTx();
             }
         }

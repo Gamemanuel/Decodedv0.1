@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Alliance;
-import org.firstinspires.ftc.teamcode.commands.turret.TurretAutoLLCMD;
-import org.firstinspires.ftc.teamcode.config.robotCommands;
-import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.config.robotCommands;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
+import org.firstinspires.ftc.teamcode.commands.turret.TurretAutoLLCMD;
 
 public abstract class TeleOp extends robotCommands {
     ButtonEx liftManualCheck;
@@ -48,13 +48,6 @@ public abstract class TeleOp extends robotCommands {
         intake.front.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
-        // telemetry data for the robot
-//        telemetry.addData("liftIsManual",liftIsManual);
-//        telemetry.addData("liftmanualcheck", liftManualCheck.wasJustPressed());
-//        telemetry.update();
-
-        turretSubsystem.periodic();
-
         if (gamepad2.right_bumper) {
             turretSubsystem.setPower(-1);
         }
@@ -71,6 +64,10 @@ public abstract class TeleOp extends robotCommands {
         } catch (NullPointerException npe) {
             telemetry.addData("speed","null");
         }
+
+        // general telemetry data for the robot
+        telemetry.addData("liftIsManual",liftIsManual);
+        telemetry.addData("liftManualCheck", liftManualCheck.wasJustPressed());
         telemetry.update();
     }
 }

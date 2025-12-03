@@ -4,7 +4,6 @@ package org.firstinspires.ftc.teamcode.commands.turret;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
 import org.firstinspires.ftc.teamcode.Alliance;
-import org.firstinspires.ftc.teamcode.solversLibComponents.PIDFController.PIDFController;
 import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
@@ -44,6 +43,6 @@ public class TurretAutoLLCMD {
                 turret.setPower(0);
             }
         }
-        return new double[] {tx, speed}; // telementry
+        return new double[] {tx, speed}; // telemetry
     }
 }
