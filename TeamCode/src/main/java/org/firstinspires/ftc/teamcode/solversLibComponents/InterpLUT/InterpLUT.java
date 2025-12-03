@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.libraryUtils.InterpLUT;
+package org.firstinspires.ftc.teamcode.solversLibComponents.InterpLUT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
