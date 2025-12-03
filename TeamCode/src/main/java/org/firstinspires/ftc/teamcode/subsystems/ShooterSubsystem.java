@@ -2,18 +2,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.controller.PIDFController;
+import org.firstinspires.ftc.teamcode.solversLibComponents.PIDFController.PIDFController;
 
 @Config
-@Configurable
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem {
 
 
     public DcMotorEx shooter;
@@ -33,7 +29,6 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterPIDF = new PIDFController(SCoeffs);
     }
 
-    @Override
     public void periodic(){
         shooterPIDF.setCoefficients(SCoeffs);
 

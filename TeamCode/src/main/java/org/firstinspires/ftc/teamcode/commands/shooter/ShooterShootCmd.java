@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.commands.shooter;
 
-import com.seattlesolvers.solverslib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 import java.util.function.DoubleSupplier;
 
-public class ShooterShootCmd extends CommandBase {
+public class ShooterShootCmd {
 
     ShooterSubsystem shooterSubsystem;
     DoubleSupplier targetvelocity;
@@ -14,23 +13,23 @@ public class ShooterShootCmd extends CommandBase {
     public ShooterShootCmd(ShooterSubsystem shooterSubsystem, DoubleSupplier targetvelocity){
         this.shooterSubsystem = shooterSubsystem;
         this.targetvelocity = targetvelocity;
-        addRequirements(shooterSubsystem);
+//        addRequirements(shooterSubsystem);
 
 
     }
 
 
-    @Override
+
     public void execute(){
         shooterSubsystem.setTargetVelocity(targetvelocity.getAsDouble());
     }
 
-    @Override
+
     public void end(boolean interrupted){
         shooterSubsystem.setTargetVelocity(0);
     }
 
-    @Override
+
     public boolean isFinished(){
         return false;
     }
