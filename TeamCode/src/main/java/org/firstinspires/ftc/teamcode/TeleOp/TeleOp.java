@@ -2,71 +2,86 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Alliance;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import org.firstinspires.ftc.teamcode.commands.shooter.ShooterAutoLLCMD;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
-import org.firstinspires.ftc.teamcode.libraryUtils.GamepadEx.ButtonEx;
 import org.firstinspires.ftc.teamcode.commands.turret.TurretAutoLLCMD;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 public abstract class TeleOp extends OpMode {
-    ButtonEx liftManualCheck;
-    boolean liftIsManual = false;
+
     Drivetrain drivetrain;
     Intake intake;
     TurretSubsystem turretSubsystem;
     LLSubsystem ll;
     TurretAutoLLCMD turretAuto;
+    ShooterSubsystem shooterSubsystem;
+    ShooterAutoLLCMD shooterAutoCmd;
+
     private final Alliance alliance;
-    double[] turretTel;
 
     public TeleOp(Alliance alliance) {
         this.alliance = alliance;
     }
 
     public void init() {
-        turretTel = new double[] {0, 0};
+        // LINK DASHBOARD AND DRIVER STATION TELEMETRY
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
+
         turretSubsystem = new TurretSubsystem(hardwareMap, alliance);
         ll = new LLSubsystem(hardwareMap, alliance);
+
+        shooterSubsystem = new ShooterSubsystem(hardwareMap);
+
+        // Initialize commands
         turretAuto = new TurretAutoLLCMD(turretSubsystem, ll);
+        shooterAutoCmd = new ShooterAutoLLCMD(shooterSubsystem, ll);
     }
 
     public void loop() {
-        // Manual lift functions
-        liftManualCheck = new ButtonEx(gamepad2.left_bumper && gamepad2.right_bumper);
-        if (liftManualCheck.wasJustPressed()) {
-            liftIsManual = !liftIsManual;
-        }
+        // 1. DRIVETRAIN
+        drivetrain.Drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-        // Drivetrain functions
-        drivetrain.Drive(gamepad1.left_stick_y,gamepad1.right_stick_x);
-
-        // Intake subsystem
+        // 2. INTAKE
         intake.front.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         intake.floop.setPosition(-gamepad2.left_stick_y * 0.75);
 
+        // 3. TURRET LOGIC
+        // Manual override triggers
         if (gamepad2.right_bumper) {
-            turretSubsystem.setPower(-1);
-        }
-        if (gamepad2.left_bumper) {
-            turretSubsystem.setPower(1);
-        }
-        if (!gamepad2.left_bumper && !gamepad2.right_bumper) {
-            turretTel = turretAuto.faceGoal(5, alliance);
-        }
-        telemetry.addData("tx", turretTel[0]);
-        telemetry.addData("speed", turretTel[1]);
-        try {
-            telemetry.addData("speed",Math.min(1, Math.max(ll.getAllianceTX() / 10, 0.25)));
-        } catch (NullPointerException npe) {
-            telemetry.addData("speed","null");
+            turretSubsystem.setPower(-0.5); // Slower manual speed is usually better
+        } else if (gamepad2.left_bumper) {
+            turretSubsystem.setPower(0.5);
+        } else {
+            // AUTOMATIC TURRET TRACKING
+            // Use a tolerance of 1.5 degrees
+            turretAuto.faceAprilTag(1.5, alliance);
         }
 
-        // general telemetry data for the robot
-        telemetry.addData("liftIsManual",liftIsManual);
-        telemetry.addData("liftManualCheck", liftManualCheck.wasJustPressed());
+        // 4. SHOOTER LOGIC
+        // Update the PID loop every cycle (CRITICAL)
+        shooterSubsystem.periodic();
+
+//        if (gamepad2.right_stick_y > 0.1) {
+//            // Manual Rev (optional override)
+//            shooterSubsystem.setTargetVelocity(1500); // Set a static speed for manual
+//        } else {
+//            // AUTOMATIC DISTANCE SETTING
+//            // This checks Limelight Area (ta) and sets target velocity using your LUT
+//            shooterAutoCmd.execute();
+//        }
+        shooterSubsystem.setTargetVelocity(1500);
+
+        // 5. TELEMETRY
+        telemetry.addData("Shooter Target", shooterSubsystem.getTargetVelocity());
+        telemetry.addData("Shooter Actual", shooterSubsystem.shooter.getVelocity());
         telemetry.update();
     }
 }

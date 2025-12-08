@@ -11,15 +11,21 @@ public class ShooterAutoLLCMD {
     private static InterpLUT VelocityLUT = new InterpLUT();
 
     static {
-        // these values must be changed manually for this to be tuned
+        // Clear the old values (technically not needed as we are rewriting, but logic wise)
+
+        // Format: VelocityLUT.add(Target_Area, Target_Velocity);
+
+        // 1. Farthest Shot (Smallest Area)
         VelocityLUT.add(0.12, 1900);
+
+        // 2. Mid-Field Shots
         VelocityLUT.add(0.2, 1670);
-        VelocityLUT.add(0.25, 1565);
         VelocityLUT.add(0.4, 1430);
-        VelocityLUT.add(0.713, 1300);
+
+        // 3. Closest Shot (Largest Area)
         VelocityLUT.add(3.22, 1050);
 
-        // this last one is a failsafe because 10 is too big and so it just shuts off the flywheel
+        // 4. Safety Value (If area is massive, e.g., 10, stop the motor)
         VelocityLUT.add(10, 0);
 
         VelocityLUT.createLUT();
@@ -32,7 +38,6 @@ public class ShooterAutoLLCMD {
     public ShooterAutoLLCMD(ShooterSubsystem subsystem, LLSubsystem LL) {
         this.subsystem = subsystem;
         this.LL = LL;
-//        addRequirements(subsystem);
     }
 
     public void execute(){
@@ -42,7 +47,7 @@ public class ShooterAutoLLCMD {
             if(Area != null){
                 double velocity = VelocityLUT.get(Area);
 
-                subsystem.setTargetVelocity(Range.clip(velocity, 1050,1565));
+                subsystem.setTargetVelocity(Range.clip(velocity, 1050, 1900));
             }
         }
     }

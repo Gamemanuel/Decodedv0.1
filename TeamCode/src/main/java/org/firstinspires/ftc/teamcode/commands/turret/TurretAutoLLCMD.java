@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.turret;
 
-
 import com.qualcomm.hardware.limelightvision.LLResult;
-
 import org.firstinspires.ftc.teamcode.Alliance;
 import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
@@ -11,36 +9,57 @@ public class TurretAutoLLCMD {
 
     TurretSubsystem turret;
     LLSubsystem ll;
-    double prevSpeed = 0;
+
+    // TUNING VALUES
+    // kP: How fast to turn per degree of error.
+    double kP = 0.02;
+    // kStatic: Minimum power required to get the servo moving (overcome friction)
+    double kStatic = 0.15;
 
     public TurretAutoLLCMD(TurretSubsystem turret, LLSubsystem ll) {
         this.turret = turret;
         this.ll = ll;
-
-
     }
 
-    public double[] faceGoal(double tolerance, Alliance alliance) {
-        if (alliance == Alliance.RED) { // if your alliance is red
-            ll.limelight.pipelineSwitch(3); //only look at red goal april tag
-        } else if (alliance == Alliance.BLUE) { // vice
-            ll.limelight.pipelineSwitch(2); // versa
+    public void faceAprilTag(double tolerance, Alliance alliance) {
+        // Switch pipeline based on alliance
+        if (alliance == Alliance.RED) {
+            ll.limelight.pipelineSwitch(3);
+        } else {
+            ll.limelight.pipelineSwitch(2);
         }
-        double tx = 0;
-        double speed = 0;
+
         LLResult result = ll.limelight.getLatestResult();
+
         if (result != null && result.isValid()) {
-            tx = result.getTx();
-            speed = Math.min(1, Math.max(tx / 10, 0.25)); // slows down, min is 0.25 power, max is 1, slows down at 10 units
+            // Get error (TX)
+            double tx = result.getTx();
+
+            // If we are outside the tolerance (e.g. > 2 degrees off)
             if (Math.abs(tx) > tolerance) {
-                turret.setPower(speed);
-                prevSpeed = speed;
+
+                // Calculate P (Proportional) term
+                double pidTerm = tx * kP;
+
+                // Calculate Feedforward (Static friction)
+                // If tx is positive (target to right), add kStatic. If negative, subtract kStatic.
+                double ffTerm = Math.signum(tx) * kStatic;
+
+                // Combine them.
+                // Since CRServo: Positive power usually turns one way.
+                // You might need to flip the sign (-) depending on your servo wiring.
+                double power = pidTerm + ffTerm;
+
+                // Send to turret (Limit to max 1.0)
+                // Note: I added a negative sign here assuming standard orientation, remove if it turns wrong way
+                turret.setPower(-power);
             } else {
+                // Inside tolerance: Stop completely
                 turret.setPower(0);
             }
         } else {
-            turret.setPower(-prevSpeed);
+            // No target found: Stop
+            turret.setPower(0);
         }
-        return new double[] {tx, speed}; // telemetry
     }
 }
