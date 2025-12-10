@@ -43,9 +43,12 @@ public abstract class TeleOp extends OpMode {
         // Initialize commands
         turretAuto = new TurretAutoLLCMD(turretSubsystem, ll);
         shooterAutoCmd = new ShooterAutoLLCMD(shooterSubsystem, ll);
+
     }
 
     public void loop() {
+        // run the ll loop every loop
+        ll.periodic();
         // 1. DRIVETRAIN
         drivetrain.Drive(gamepad1.left_stick_y, gamepad1.right_stick_x);
 
@@ -56,7 +59,7 @@ public abstract class TeleOp extends OpMode {
         // 3. TURRET LOGIC
         // Manual override triggers
         if (gamepad2.right_bumper) {
-            turretSubsystem.setPower(-0.5); // Slower manual speed is usually better
+            turretSubsystem.setPower(-0.5);
         } else if (gamepad2.left_bumper) {
             turretSubsystem.setPower(0.5);
         } else {
@@ -69,15 +72,15 @@ public abstract class TeleOp extends OpMode {
         // Update the PID loop every cycle (CRITICAL)
         shooterSubsystem.periodic();
 
-//        if (gamepad2.right_stick_y > 0.1) {
-//            // Manual Rev (optional override)
-//            shooterSubsystem.setTargetVelocity(1500); // Set a static speed for manual
-//        } else {
-//            // AUTOMATIC DISTANCE SETTING
-//            // This checks Limelight Area (ta) and sets target velocity using your LUT
-//            shooterAutoCmd.execute();
-//        }
-        shooterSubsystem.setTargetVelocity(1500);
+        if (gamepad2.right_stick_y > 0.1) {
+            // Manual Rev (optional override)
+            shooterSubsystem.setTargetVelocity(1500); // Set a static speed for manual
+        } else {
+            // AUTOMATIC DISTANCE SETTING
+            // This checks Limelight Area (ta) and sets target velocity using your LUT
+            shooterAutoCmd.execute();
+        }
+
 
         // 5. TELEMETRY
         telemetry.addData("Shooter Target", shooterSubsystem.getTargetVelocity());
