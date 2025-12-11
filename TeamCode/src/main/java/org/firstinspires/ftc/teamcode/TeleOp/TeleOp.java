@@ -19,7 +19,7 @@ public abstract class TeleOp extends OpMode {
     TurretSubsystem turretSubsystem;
     LLSubsystem ll;
     TurretAutoLLCMD turretAuto;
-    ShooterSubsystem shooterSubsystem;
+    ShooterSubsystem shooter;
     ShooterAutoLLCMD shooterAutoCmd;
 
     private final Alliance alliance;
@@ -38,11 +38,11 @@ public abstract class TeleOp extends OpMode {
         turretSubsystem = new TurretSubsystem(hardwareMap, alliance);
         ll = new LLSubsystem(hardwareMap, alliance);
 
-        shooterSubsystem = new ShooterSubsystem(hardwareMap);
+        shooter = new ShooterSubsystem(hardwareMap);
 
         // Initialize commands
         turretAuto = new TurretAutoLLCMD(turretSubsystem, ll);
-        shooterAutoCmd = new ShooterAutoLLCMD(shooterSubsystem, ll);
+//        shooterAutoCmd = new ShooterAutoLLCMD(shooter, ll);
 
     }
 
@@ -68,23 +68,25 @@ public abstract class TeleOp extends OpMode {
             turretAuto.faceAprilTag(1.5, alliance);
         }
 
-        // 4. SHOOTER LOGIC
-        // Update the PID loop every cycle (CRITICAL)
-        shooterSubsystem.periodic();
 
-        if (gamepad2.right_stick_y > 0.1) {
-            // Manual Rev (optional override)
-            shooterSubsystem.setTargetVelocity(1500); // Set a static speed for manual
-        } else {
-            // AUTOMATIC DISTANCE SETTING
-            // This checks Limelight Area (ta) and sets target velocity using your LUT
-            shooterAutoCmd.execute();
-        }
 
+//        if (gamepad2.right_stick_y > 0.1) {
+//            // Manual Rev (optional override)
+//            shooterSubsystem.setTargetVelocity(1500); // Set a static speed for manual
+//        } else {
+//            // AUTOMATIC DISTANCE SETTING
+//            // This checks Limelight Area (ta) and sets target velocity using your LUT
+//            shooterAutoCmd.execute();
+//        }
+
+        shooter.setTargetVelocity(-1350);
+
+        // 2. Run the Periodic loop (Calculates PID + Feedforward)
+        shooter.periodic();
 
         // 5. TELEMETRY
-        telemetry.addData("Shooter Target", shooterSubsystem.getTargetVelocity());
-        telemetry.addData("Shooter Actual", shooterSubsystem.shooter.getVelocity());
+        telemetry.addData("Shooter Target", shooter.getTargetVelocity());
+        telemetry.addData("Shooter Actual", shooter.shooter.getVelocity());
         telemetry.update();
     }
 }

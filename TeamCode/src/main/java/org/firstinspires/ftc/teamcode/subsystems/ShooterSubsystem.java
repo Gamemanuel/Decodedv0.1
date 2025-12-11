@@ -19,7 +19,7 @@ public class ShooterSubsystem {
 
     // PID Coefficients - Tune these in Dashboard!
     public static PIDFCoefficients SCoeffs = new PIDFCoefficients(0, 0, 0, 0);
-    public static double kV = 0; // Base feedforward
+    public static double kV = 0.000415; // Base feedforward
 
     private double TargetVelocity = 0;
 
@@ -27,7 +27,7 @@ public class ShooterSubsystem {
         shooter = hMap.get(DcMotorEx.class,"shooter");
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
+//        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Initialize voltage sensor (usually named "Control Hub")
         batteryVoltageSensor = hMap.voltageSensor.iterator().next();
@@ -60,7 +60,7 @@ public class ShooterSubsystem {
     }
 
     public void setTargetVelocity(double target){
-        TargetVelocity = target;
+        TargetVelocity = -target;
         // Update the PID setpoint immediately
         shooterPIDF.setSetPoint(target);
     }
