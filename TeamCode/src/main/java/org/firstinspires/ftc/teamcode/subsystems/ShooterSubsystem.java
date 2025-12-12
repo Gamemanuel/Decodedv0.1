@@ -18,7 +18,7 @@ public class ShooterSubsystem {
     private VoltageSensor batteryVoltageSensor; // To read battery voltage
 
     // PID Coefficients - Tune these in Dashboard!
-    public static PIDFCoefficients SCoeffs = new PIDFCoefficients(0, 0, 0, 0);
+    public static PIDFCoefficients SCoeffs = new PIDFCoefficients(-0.00055, 0, -0.00004, 0);
     public static double kV = 0.000415; // Base feedforward
 
     private double TargetVelocity = 0;
@@ -36,27 +36,35 @@ public class ShooterSubsystem {
     }
 
     public void periodic(){
-        // 1. Update Coefficients from Dashboard
+        // 1. Update Coefficients
         shooterPIDF.setCoefficients(SCoeffs);
 
         // 2. Get Current State
-        double currentVelocity = shooter.getVelocity();
+        double currentVelocity = shooter.getVelocity(); // Likely returns negative (e.g., -1500)
         double currentVoltage = batteryVoltageSensor.getVoltage();
 
-        // 3. Calculate PID Output
-        // Note: Changed .calculate() to .calculateOutput() to match your library
+        // 3. PID Calculation
+        // If Target is -1500 and Current is -1200 (slowed down):
+        // Error = -1500 - (-1200) = -300.
+        // PID Output = kP * -300 = Negative Power (Correct!)
         double pidOutput = shooterPIDF.calculateOutput(currentVelocity);
 
-        // 4. Calculate Feedforward (kV * Target)
-        double feedforward = kV * TargetVelocity;
+        // 4. Feedforward
+        double feedforward = kV * TargetVelocity; // Positive kV * Negative Target = Negative Power
 
-        // 5. Combine and Voltage Compensate
-        // We normalize the power to 12V. If battery is 14V, we scale down. If 11V, we scale up.
+        // 5. Voltage Compensation
         double targetPower = (feedforward + pidOutput) * (12.0 / currentVoltage);
 
-        // 6. Apply Power
-        // Ensure we don't send negative power if we just want to coast down (optional)
-        shooter.setPower(Math.max(0, targetPower));
+        // 6. RECOVERY CHECK (Bang-Bang Hybrid)
+        // If we are spinning significantly slower than target (e.g. dropped 300 RPM)
+        // Remember: -1200 is "greater" than -1500
+        if (TargetVelocity < -500 && currentVelocity > TargetVelocity + 200) {
+            // We lost speed! Full throttle to recover.
+            shooter.setPower(-1.0);
+        } else {
+            // Normal PID control
+            shooter.setPower(targetPower);
+        }
     }
 
     public void setTargetVelocity(double target){

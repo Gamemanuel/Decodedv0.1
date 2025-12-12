@@ -13,6 +13,7 @@ public class TurretAutoLLCMD {
     // TUNING VALUES
     // kP: How fast to turn per degree of error.
     double kP = 0.02;
+
     // kStatic: Minimum power required to get the servo moving (overcome friction)
     double kStatic = 0.15;
 
@@ -33,7 +34,8 @@ public class TurretAutoLLCMD {
 
         if (result != null && result.isValid()) {
             // Get error (TX)
-            double tx = result.getTx();
+            double offset = -4;
+            double tx = result.getTx() + offset;
 
             // If we are outside the tolerance (e.g. > 2 degrees off)
             if (Math.abs(tx) > tolerance) {

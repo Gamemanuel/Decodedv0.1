@@ -13,6 +13,28 @@ public class LLSubsystem {
     public Limelight3A limelight;
     public LLResult result;
 
+    // MEASURE THESE VALUES ON YOUR ROBOT
+    private static final double CAMERA_HEIGHT_INCHES = 16.0; // Height of the Limelight lens from the floor
+    private static final double TARGET_HEIGHT_INCHES = 29.5; // Height of the Goal center from the floor
+    private static final double CAMERA_PITCH_DEGREES = 5.0; // Angle of Limelight (0 is straight forward, + is looking up)
+
+    public double getDistanceInches() {
+        if (result == null || !result.isValid()) {
+            return -1; // Return -1 if no target is seen
+        }
+
+        double ty = result.getTy(); // Vertical offset from the Limelight (degrees)
+
+        // Calculate the angle of the target relative to the ground
+        double angleToGoalRadians = Math.toRadians(CAMERA_PITCH_DEGREES + ty);
+
+        // Calculate distance: (Goal Height - Camera Height) / tan(total angle)
+        double heightDifference = TARGET_HEIGHT_INCHES - CAMERA_HEIGHT_INCHES;
+        double distance = heightDifference / Math.tan(angleToGoalRadians);
+
+        return distance;
+    }
+
     public LLSubsystem(HardwareMap hMap, Alliance alliance) {
         limelight = hMap.get(Limelight3A.class, "limelight");
         this.alliance = alliance;

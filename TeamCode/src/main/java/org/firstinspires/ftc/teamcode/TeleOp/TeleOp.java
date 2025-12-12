@@ -42,7 +42,7 @@ public abstract class TeleOp extends OpMode {
 
         // Initialize commands
         turretAuto = new TurretAutoLLCMD(turretSubsystem, ll);
-//        shooterAutoCmd = new ShooterAutoLLCMD(shooter, ll);
+        shooterAutoCmd = new ShooterAutoLLCMD(shooter, ll);
 
     }
 
@@ -78,8 +78,10 @@ public abstract class TeleOp extends OpMode {
 //            // This checks Limelight Area (ta) and sets target velocity using your LUT
 //            shooterAutoCmd.execute();
 //        }
+        shooterAutoCmd.execute();
 
-        shooter.setTargetVelocity(-1350);
+//        shooter.setTargetVelocity(-1350);
+//        shooter.shooter.setPower(-gamepad2.right_stick_y);
 
         // 2. Run the Periodic loop (Calculates PID + Feedforward)
         shooter.periodic();
