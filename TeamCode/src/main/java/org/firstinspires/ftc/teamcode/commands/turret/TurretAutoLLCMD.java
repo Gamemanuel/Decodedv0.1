@@ -34,7 +34,7 @@ public class TurretAutoLLCMD {
 
         if (result != null && result.isValid()) {
             // Get error (TX)
-            double offset = -4;
+            double offset = 1;
             double tx = result.getTx() + offset;
 
             // If we are outside the tolerance (e.g. > 2 degrees off)

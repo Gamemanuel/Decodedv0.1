@@ -20,7 +20,7 @@ public class LLSubsystem {
 
     public double getDistanceInches() {
         if (result == null || !result.isValid()) {
-            return -1; // Return -1 if no target is seen
+            return 1000.0;
         }
 
         double ty = result.getTy(); // Vertical offset from the Limelight (degrees)
@@ -30,9 +30,8 @@ public class LLSubsystem {
 
         // Calculate distance: (Goal Height - Camera Height) / tan(total angle)
         double heightDifference = TARGET_HEIGHT_INCHES - CAMERA_HEIGHT_INCHES;
-        double distance = heightDifference / Math.tan(angleToGoalRadians);
 
-        return distance;
+        return heightDifference / Math.tan(angleToGoalRadians);
     }
 
     public LLSubsystem(HardwareMap hMap, Alliance alliance) {
@@ -50,6 +49,7 @@ public class LLSubsystem {
         if (result != null && result.isValid()) {
             FtcDashboard.getInstance().getTelemetry().addData("LL AprilTag tA", result.getTa());
             FtcDashboard.getInstance().getTelemetry().addData("LL AprilTag tX", result.getTy());
+            FtcDashboard.getInstance().getTelemetry().addData("Distance in", getDistanceInches());
         } else {
             FtcDashboard.getInstance().getTelemetry().addData("Limelight", "No Targets");
         }

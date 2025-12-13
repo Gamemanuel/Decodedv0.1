@@ -26,7 +26,7 @@ public class ShooterAutoLLCMD {
         VelocityLUT.add(120, -1525);
 
         // 4. Maximum Range Cap (If we see something extremely far)
-        VelocityLUT.add(180, -3000);
+        VelocityLUT.add(8000, -3000);
 
         VelocityLUT.createLUT();
     }

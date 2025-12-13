@@ -68,20 +68,14 @@ public abstract class TeleOp extends OpMode {
             turretAuto.faceAprilTag(1.5, alliance);
         }
 
-
-
-//        if (gamepad2.right_stick_y > 0.1) {
-//            // Manual Rev (optional override)
-//            shooterSubsystem.setTargetVelocity(1500); // Set a static speed for manual
-//        } else {
-//            // AUTOMATIC DISTANCE SETTING
-//            // This checks Limelight Area (ta) and sets target velocity using your LUT
-//            shooterAutoCmd.execute();
-//        }
-        shooterAutoCmd.execute();
-
-//        shooter.setTargetVelocity(-1350);
-//        shooter.shooter.setPower(-gamepad2.right_stick_y);
+        if (gamepad2.right_stick_y != 0) {
+            // Manual Rev (optional override)
+            shooter.shooter.setPower(gamepad2.right_stick_y); // Set a static speed for manual
+        } else {
+            // AUTOMATIC DISTANCE SETTING
+            // This checks Limelight Area (ta) and sets target velocity using your LUT
+            shooterAutoCmd.execute();
+        }
 
         // 2. Run the Periodic loop (Calculates PID + Feedforward)
         shooter.periodic();
