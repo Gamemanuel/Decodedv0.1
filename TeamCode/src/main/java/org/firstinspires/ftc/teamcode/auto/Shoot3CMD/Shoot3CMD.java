@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.auto.Shoot3CMD;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Alliance;
@@ -16,8 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 @Config
-@Autonomous(name = "Shoot 3 Ball Auto", group = "Final")
-public class Shoot3CMD extends LinearOpMode {
+public abstract class Shoot3CMD extends LinearOpMode {
 
     // --- TUNING CONSTANTS ---
     public static double DRIVE_POWER = -0.3;
@@ -42,14 +40,20 @@ public class Shoot3CMD extends LinearOpMode {
     TurretAutoLLCMD turretAuto;
     ShooterAutoLLCMD shooterAutoCmd;
 
+    private final Alliance alliance;
+
+    public Shoot3CMD(Alliance alliance) {
+        this.alliance = alliance;
+    }
+
     @Override
     public void runOpMode() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         drivetrain = new Drivetrain(hardwareMap);
         intake = new Intake(hardwareMap);
-        turretSubsystem = new TurretSubsystem(hardwareMap, Alliance.RED);
-        ll = new LLSubsystem(hardwareMap, Alliance.BLUE);
+        turretSubsystem = new TurretSubsystem(hardwareMap, alliance);
+        ll = new LLSubsystem(hardwareMap, alliance);
         shooter = new ShooterSubsystem(hardwareMap);
 
         turretAuto = new TurretAutoLLCMD(turretSubsystem, ll);
@@ -172,6 +176,6 @@ public class Shoot3CMD extends LinearOpMode {
         ll.periodic();
         shooterAutoCmd.execute();
         shooter.periodic();
-        turretAuto.faceAprilTag(TURRET_TOLERANCE, Alliance.RED);
+        turretAuto.faceAprilTag(TURRET_TOLERANCE, alliance);
     }
 }
