@@ -16,6 +16,7 @@ public class TurretAutoLLCMD {
 
     // kStatic: Minimum power required to get the servo moving (overcome friction)
     double kStatic = 0.15;
+    public double offset;
 
     public TurretAutoLLCMD(TurretSubsystem turret, LLSubsystem ll) {
         this.turret = turret;
@@ -26,15 +27,16 @@ public class TurretAutoLLCMD {
         // Switch pipeline based on alliance
         if (alliance == Alliance.RED) {
             ll.limelight.pipelineSwitch(3);
+            offset = 2.5;
         } else {
             ll.limelight.pipelineSwitch(2);
+            offset = 1;
         }
 
         LLResult result = ll.limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
             // Get error (TX)
-            double offset = 1;
             double tx = result.getTx() + offset;
 
             // If we are outside the tolerance (e.g. > 2 degrees off)

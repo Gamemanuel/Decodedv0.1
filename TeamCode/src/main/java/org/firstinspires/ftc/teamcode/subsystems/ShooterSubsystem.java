@@ -19,7 +19,7 @@ public class ShooterSubsystem {
 
     // PID Coefficients - Tune these in Dashboard!
     public static PIDFCoefficients SCoeffs = new PIDFCoefficients(-0.00055, 0, -0.00004, 0);
-    public static double kV = 0.000415; // Base feedforward
+    public static double kV = 0.000633; // Base feedforward
 
     private double TargetVelocity = 0;
 

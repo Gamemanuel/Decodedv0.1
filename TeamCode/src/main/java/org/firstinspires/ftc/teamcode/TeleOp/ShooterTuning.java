@@ -1,13 +1,19 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import androidx.appcompat.widget.AlertDialogLayout;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Alliance;
+import org.firstinspires.ftc.teamcode.commands.turret.TurretAutoLLCMD;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.LLSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 @Config
 @TeleOp(name = "Shooter Tuning", group = "Tuning")
@@ -15,6 +21,9 @@ public class ShooterTuning extends LinearOpMode {
 
     ShooterSubsystem shooter;
     Intake intake;
+    LLSubsystem llSubsystem;
+    TurretSubsystem turretSubsystem;
+    TurretAutoLLCMD turretAuto;
 
     // Tuning variable visible in Dashboard
     public static double TESTING_TARGET_RPM = 1500;
@@ -26,6 +35,9 @@ public class ShooterTuning extends LinearOpMode {
 
         shooter = new ShooterSubsystem(hardwareMap);
         intake = new Intake(hardwareMap);
+        llSubsystem = new LLSubsystem(hardwareMap, Alliance.RED);
+        turretSubsystem = new TurretSubsystem(hardwareMap, Alliance.RED);
+        turretAuto = new TurretAutoLLCMD(turretSubsystem, llSubsystem);
 
         telemetry.addLine("Ready to Tune. Open FTC Dashboard (192.168.43.1:8080)");
         telemetry.update();
@@ -33,9 +45,16 @@ public class ShooterTuning extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            // run the ll loop every loop
+            llSubsystem.periodic();
+
+            telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
             // 1. Set the target velocity from the Dashboard variable
             shooter.setTargetVelocity(TESTING_TARGET_RPM);
             intake.front.setPower(-1);
+
+            turretAuto.faceAprilTag(1.5, Alliance.RED);
 
             // 2. Run the Periodic loop (Calculates PID + Feedforward)
             shooter.periodic();

@@ -54,11 +54,12 @@ public class ShooterAutoLLCMD {
 
                 // 4. Send to motor
                 // Note: Update the Range.clip numbers to match your min/max safe RPMs
-                subsystem.setTargetVelocity(targetVelocity-100);
+                subsystem.setTargetVelocity(targetVelocity-80);
             }
         } else {
             // Optional: Stop shooter or maintain idle speed if target is lost
             // subsystem.setTargetVelocity(0);
         }
     }
+
 }

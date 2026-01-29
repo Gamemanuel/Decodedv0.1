@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.Shoot3CMD;
+package org.firstinspires.ftc.teamcode.auto.Shoot3CMDClose;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -15,10 +15,10 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 @Config
-public abstract class Shoot3CMD extends LinearOpMode {
+public abstract class Shoot3CMDClose extends LinearOpMode {
 
     // --- TUNING CONSTANTS ---
-    public static double DRIVE_POWER = -0.34;
+    public static double DRIVE_POWER = 0.34;
     public static final double TARGET_DISTANCE_INCHES = 69.0;
     public static final double SHOOTER_TOLERANCE = 2380.0;
     public static final long PUSH_DURATION_MS = 600;
@@ -42,7 +42,7 @@ public abstract class Shoot3CMD extends LinearOpMode {
 
     private final Alliance alliance;
 
-    public Shoot3CMD(Alliance alliance) {
+    public Shoot3CMDClose(Alliance alliance) {
         this.alliance = alliance;
     }
 
@@ -100,6 +100,7 @@ public abstract class Shoot3CMD extends LinearOpMode {
         // =================================================================
         // PHASE 3: Shoot 3 Balls
         // =================================================================
+        safeWait(8000);
         safeWait(PUSH_DURATION_MS);
         if (opModeIsActive()) {
             intake.front.setPower(-1.0);
@@ -150,19 +151,14 @@ public abstract class Shoot3CMD extends LinearOpMode {
         turretSubsystem.setPower(0);
         drivetrain.Drive(0,0);
 
-        while (ll.getDistanceInches() < 90 && opModeIsActive() && ll.getDistanceInches() != 1000) {
-            drivetrain.Drive(-DRIVE_POWER, 0);
+        while (ll.getDistanceInches() < 69 && opModeIsActive() && ll.getDistanceInches() != 1000) {
+            drivetrain.Drive(DRIVE_POWER, 0);
             runSubsystems(); // Updates PID and Vision
             telemetry.addData("Phase", "1. Driving");
             telemetry.addData("Distance", ll.getDistanceInches());
             telemetry.update();
         }
         drivetrain.Drive(0, 0);
-
-        // =================================================================
-        // PHASE 5: Turn to Samples
-        // =================================================================
-        turnToLimelight();
     }
 
     /**
@@ -183,59 +179,5 @@ public abstract class Shoot3CMD extends LinearOpMode {
         shooterAutoCmd.execute();
         shooter.periodic();
         turretAuto.faceAprilTag(TURRET_TOLERANCE, alliance);
-    }
-
-    /**
-     * Turns the robot chassis to face the Limelight target (TX = 0).
-     */
-    public void turnToLimelight() {
-        // --- TUNING ---
-        double TURN_KP = 0.03;      // Power per degree of error (Tune this!)
-        double TOLERANCE = 2.0;     // Allowed error in degrees
-        double MIN_POWER = 0.15;    // Minimum power to overcome friction
-        long TIMEOUT_MS = 3000;     // Safety timeout (3 seconds)
-
-        // Ensure subsystems are stopped so they don't fight the turn
-        turretSubsystem.setPower(0);
-
-        // Optional: Switch Pipeline here if needed for Samples
-        // ll.setPipeline(1); // Example: 0 = AprilTag, 1 = Yellow Sample
-
-        long start = System.currentTimeMillis();
-
-        while (opModeIsActive() && (System.currentTimeMillis() - start < TIMEOUT_MS)) {
-            // Update Limelight Data
-            ll.periodic();
-
-            // GET ERROR
-            // NOTE: Ensure your LLSubsystem has a getTx() method exposed!
-            double tx = ll.getAllianceTX();
-
-            // CHECK EXIT CONDITION
-            if (Math.abs(tx) < TOLERANCE && tx != 0.0) { // tx != 0 check ensures we actually see a target
-                break;
-            }
-
-            // CALCULATE POWER (Proportional Control)
-            // If target is to the left (tx positive/negative depends on config), turn to face it.
-            // Usually: tx > 0 (Target Right) -> Turn Right (Positive Power)
-            double turnPower = tx * TURN_KP;
-
-            // Apply Minimum Feedforward (Friction)
-            if (Math.abs(turnPower) < MIN_POWER) {
-                turnPower = MIN_POWER * Math.signum(turnPower);
-            }
-
-            // Apply Power (0 Forward, turnPower Turn)
-            drivetrain.Drive(0, turnPower);
-
-            telemetry.addData("Phase", "5. Turning to Sample");
-            telemetry.addData("Error (tx)", tx);
-            telemetry.addData("Power", turnPower);
-            telemetry.update();
-        }
-
-        // Stop
-        drivetrain.Drive(0, 0);
     }
 }

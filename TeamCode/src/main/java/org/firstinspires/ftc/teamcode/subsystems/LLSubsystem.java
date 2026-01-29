@@ -68,7 +68,7 @@ public class LLSubsystem {
     }
 
 
-    public Double getAllianceTX() {
+    public double getAllianceTX() {
 
         if (result != null && result.isValid() && !result.getFiducialResults().isEmpty()) {
             int id = result.getFiducialResults().get(0).getFiducialId();
@@ -77,8 +77,11 @@ public class LLSubsystem {
                 return result.getTx();
             }
         }
+        return 0;
+    }
 
-        return null;
+    public boolean isTargetFound() {
+        return Math.abs(getAllianceTX()) > 0.0;
     }
 
 
